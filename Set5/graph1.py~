@@ -1,0 +1,121 @@
+import sys
+import string
+
+maxdepth = 0
+	
+
+def binary_search(a, target):
+    x = 0
+    y = len(a)
+    
+    while x < y:
+        m = (x+y)/2
+        if a[m] < target:
+            x = m+1
+        elif a[m] > target:
+            y = m
+        else:
+            return True
+    return False
+
+class Vertex:
+	def __init__(self, key):
+       	 	self.id = key
+        	self.connectedTo = {}
+		self.visited = False
+	
+	def addchild(self, chld, weight = 0):
+		self.connectedTo[chld] = weight
+
+	def getConnections(self):
+        	return self.connectedTo.keys()
+	
+	def getId(self):
+        	return self.id
+
+class Graph:
+	def __init__(self):
+		self.vertList = {}
+		self.numVertices = 0
+
+	def addVertex(self, key):
+		self.numVerticies = self.numVertices + 1
+		newVertex = Vertex(key)
+		self.vertList[key] = newVertex
+		return newVertex
+
+  	def getVertex(self, n):
+        	if n in self.vertList:
+            		return self.vertList[n]
+        	else:
+           		return None
+
+	def addEdge(self, f, t, cost = 0):
+		if f not in self.vertList:
+           		nv = self.addVertex(f)
+        	if t not in self.vertList:
+           		nv = self.addVertex(t)
+		self.vertList[f].addchild(self.vertList[t], cost)
+
+	def __contains__(self,n):
+        	return n in self.vertList
+
+	def __iter__(self):
+	        return iter(self.vertList.values())
+
+
+
+def makeGraph(sortedlist):
+
+	a = open(sortedlist,"r")
+	sortedlist = a.read().splitlines()
+	a.close()
+
+	g = Graph()
+
+
+	for word in sortedlist:
+		g.addVertex(word)	
+	
+		#sys.stdout.write(" %s" % i)
+		for letter in string.uppercase[:26]:
+			t = list(word)
+			t.append(letter)
+			t.sort()
+			t = "".join(t)
+			if binary_search(sortedlist, t):
+				g.addEdge(word, t, 1)
+
+			
+	return g
+
+def dfs(g):
+	
+
+	for v in iter(g):
+		if v.visited == False and len(list(v.getId())) == 2:
+			explore(g, v, 0)
+
+			
+
+
+def explore(g, v, counter):
+
+	global maxdepth
+
+	v.visited = True
+
+	for e in v.getConnections():
+		if e.visited == False:
+			explore(g, e, counter + 1)
+		#sys.stdout.write(" %s" % counter)
+		if (v.visited == True) and (counter > maxdepth):
+			maxdepth = counter
+			print e.getId()
+		
+
+	
+				
+	
+dfs(makeGraph("sortedlist.txt"))
+sys.stdout.write("%s\n" % maxdepth)

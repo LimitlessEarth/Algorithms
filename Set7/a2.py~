@@ -1,0 +1,11 @@
+def Graph(graph):
+		
+	a = open(graph, "r")
+	graph = a.read().splitlines()
+	a.close()
+
+	for line in a:
+    		for item in line.split("\t"):
+        		print item
+
+Graph("soc-Slashdot0811.txt")

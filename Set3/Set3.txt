@@ -1,0 +1,86 @@
+3. 1105
+
+import sys
+
+a=2
+N=1
+b=0
+
+while(b==0) :
+ print "N=", N
+
+ if (2**(N-1)) % N == 1:
+  for c in range(2, N):
+   if (N % c) == 0:
+    print "PSO 2", N
+    
+
+    if (3**(N-1)) % N == 1:
+     for c in range(2, N):
+      if (N % c) == 0:
+       print "PSO 3", N
+       
+
+       if (2013**(N-1)) % N == 1:
+        for c in range(2, N):
+         if (N % c) == 0:
+          print "PSO 2013", N
+          b=1
+          
+ N=N+1
+
+4. Next prime is  1556642001415450885363011926342364892322591839000398286585785855871067460392965421912430859681416618309437233804422680987742255926821108997052133833582998914043034313
+
+import random
+
+def modexp(x,y,N):
+ if y == 0:
+  return 1
+ z=modexp(x,(y/2),N)
+ if (y%2) == 0:
+  return ((z**2) % N)
+ else:
+  return ((x*z**2)%N)
+
+def isprime(N):
+ a=random.randint(2, (N-1))
+ if ( modexp(a, N-1, N)  == 1):
+  return True
+ return False
+
+def nextprime(i):
+
+ if (i%2) == 0:
+  i+=-1
+
+ a=False
+
+ while(a == False):
+  i+=2
+  for j in range(0,51):
+   a=isprime(i)
+  
+
+ print "Next prime is ", i
+ return i
+
+5. The average distance is 22913
+
+def avgdist():
+ a=0
+ b= [0]*1001
+ d=0
+ acc=0
+ while (a<=1000):
+  s=getrand100()
+  print s
+  b[a]=nextprime(s)-s
+  a+=1
+ 
+ while (d<=1000):
+  acc+=b[d]
+  d+=1
+ 
+ e=acc/10
+ print "The average distance is", e
+

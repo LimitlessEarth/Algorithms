@@ -1,0 +1,65 @@
+# Problem 6: Implement selection sort from book, and use implementation to find
+# the median word in a list of words
+
+import random
+
+reccalls = 0
+
+# Implementation of Selection.
+# Dasgupta, Papdimitriou, and Vazirani Page 54
+def select(S, k):
+    global reccalls
+
+    # Pick some random element in array S to be the pivot
+    v = random.choice(S)
+    Sl = []; Sv = []; Sr = []
+    
+    # Split array S based on whether value is less, equal, or greater than the
+    # array value at the pivot
+    for elt in S:
+        if elt < v:
+            Sl.append(elt)
+        elif elt == v:
+            Sv.append(elt)
+        else:
+            Sr.append(elt)
+
+    # Recurse
+    if len(Sl) < k <= len(Sl) + len(Sv):
+        return v
+    elif k <= len(Sl):
+        reccalls = reccalls + 1
+        print "Recursing on list of size: " + str(len(Sl))
+        return select(Sl, k)
+    elif k > len(Sl) + len(Sv):
+        reccalls = reccalls + 1
+        print "Recursing on list of size: " + str(len(Sr))
+        return select(Sr, k - len(Sl) - len(Sv))
+
+# Open a file wordlist, and find the median word
+def wordListMedian(wordlist):
+    fo = open(wordlist,"r")
+    wordlist = fo.read().splitlines()
+    
+    length = len(wordlist) + 1
+    print length - 1
+    return select(wordlist, length/2)
+
+def statTests(wordlist):
+    global reccalls
+    
+    recursions = []
+    for i in range(5):
+        wordListMedian(wordlist)
+        recursions = recursions + [reccalls]
+        print i
+        reccalls = 0
+    
+    print recursions
+
+if __name__ == "__main__":
+    S = [2,36,5,21,8,13,11,20,5,4,1]
+
+    print statTests("wordlist.txt")
+
+    # > LUNK
